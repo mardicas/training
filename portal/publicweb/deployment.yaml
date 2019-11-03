@@ -1,0 +1,39 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: publicweb
+  name: publicweb
+  namespace: portal
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: publicweb
+  template:
+    metadata:
+      labels:
+        app: publicweb
+    spec:
+      serviceAccountName: portalsa
+      containers:
+      - name: pinger
+        image: garland/kubectl:1.10.4
+        command:
+        - /bin/sh
+        - -c
+        - /test/ping.sh
+        volumeMounts:
+        - name: code
+          mountPath: /test
+      - name: webserver
+        image: nginxdemos/hello:plain-text
+        imagePullPolicy: Always
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 5
+      volumes:
+      - name: code
+        configMap:
+          name: code
+          defaultMode: 0777

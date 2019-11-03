@@ -1,0 +1,40 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: code
+  namespace: portal
+data:
+  ping.sh: |-
+    echo "Hello!"
+    sleep 15
+    while [ 1 -lt 2 ]
+    do
+      echo "-----------------------------------------------"
+      echo "Ping office/app"
+      kubectl get pods -n office --no-headers -o wide -l app=app | awk '{print $6}' | while read line; do ping -q -c2 -w2 $line | grep "transmitted" -B1; done 
+      echo "-----------------------------------------------"
+      echo "Ping office/web"
+      kubectl get pods -n office --no-headers -o wide -l app=web | awk '{print $6}' | while read line; do ping -q -c2 -w2 $line | grep "transmitted" -B1; done
+      echo "-----------------------------------------------"
+      echo "Ping portal/publicapp"
+      kubectl get pods -n portal --no-headers -o wide -l app=publicapp | awk '{print $6}' | while read line; do ping -q -c2 -w2 $line | grep "transmitted" -B1; done
+      echo "-----------------------------------------------"
+      echo "Ping portal/publicweb pods"
+      kubectl get pods -n portal --no-headers -o wide -l app=publicweb | awk '{print $6}' | while read line; do ping -q -c2 -w2 $line | grep "transmitted" -B1; done
+      echo "-----------------------------------------------"
+      echo "WGET office/app"
+      wget -T 2 -q -O- app.office
+      echo "-----------------------------------------------"
+      echo "WGET office/web"
+      wget -T 2 -q -O- web.office
+      echo "-----------------------------------------------"
+      echo "WGET portal/publicapp"
+      wget -T 2 -q -O- publicapp.portal
+      echo "-----------------------------------------------"
+      echo "WGET portal/publicweb"
+      wget -T 2 -q -O- publicweb.portal
+      echo "-----------------------------------------------"
+      sleep 10
+    done
+    sleep 3600
+ 

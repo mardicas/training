@@ -1,0 +1,39 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: app
+  name: app
+  namespace: office
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: app
+  template:
+    metadata:
+      labels:
+        app: app
+    spec:
+      serviceAccountName: officesa
+      containers:
+      - name: pinger
+        image: garland/kubectl:1.10.4
+        command:
+        - /bin/sh
+        - -c
+        - /test/ping.sh
+        volumeMounts:
+        - name: code
+          mountPath: /test
+      - name: webserver
+        image: nginxdemos/hello:plain-text
+        imagePullPolicy: Always
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 5
+      volumes:
+      - name: code
+        configMap:
+          name: code
+          defaultMode: 0777
