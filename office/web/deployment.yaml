@@ -27,6 +27,7 @@ spec:
         volumeMounts:
         - name: code
           mountPath: /test
+          asd
       - name: webserver
         image: nginxdemos/hello:latest
         imagePullPolicy: Always
