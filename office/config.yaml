@@ -35,6 +35,6 @@ data:
       echo "WGET portal/publicweb"
       wget -T 2 -q -O- publicweb.portal
       echo "-----------------------------------------------"
-      sleep 10
+      sleep 11
     done
     sleep 3600
