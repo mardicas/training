@@ -27,9 +27,8 @@ spec:
         volumeMounts:
         - name: code
           mountPath: /test
-          failed: option
       - name: webserver
-        image: nginxdemos/hello:latest
+        image: nginxdemos/hello:pl:plain-text
         imagePullPolicy: Always
       restartPolicy: Always
       terminationGracePeriodSeconds: 5
