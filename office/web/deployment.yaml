@@ -28,7 +28,7 @@ spec:
         - name: code
           mountPath: /test
       - name: webserver
-        image: nginxdemos/hello:pl:plain-text
+        image: nginxdemos/hello:plain-text
         imagePullPolicy: Always
       restartPolicy: Always
       terminationGracePeriodSeconds: 5
